@@ -19,14 +19,12 @@ def handle_command(line):
     if cmd == "ECHO":
         return line.strip()[len("ECHO ") :]
 
-    if cmd == "SET":
-        if len(parts) >= 3:
-            store[parts[1]] = parts[2]
-            return "OK"
+    if cmd == "SET" and len(parts) >= 3:
+        store[parts[1]] = parts[2]
+        return "OK"
 
-    if cmd == "GET":
-        if len(parts) >= 2:
-            return store.get(parts[1], "NOT_FOUND")
+    if cmd == "GET" and len(parts) >= 2:
+        return store.get(parts[1], "NOT_FOUND")
 
     return "ERR"
 
@@ -50,7 +48,7 @@ def handle_client(conn, addr):
 
                     try:
                         response = handle_command(line)
-                    except Exception as e:
+                    except ConnectionError as e:
                         print(e)
                         response = "ERR"
 
